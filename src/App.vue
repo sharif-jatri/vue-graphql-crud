@@ -1,8 +1,10 @@
 <template>
   <img alt="Vue logo" src="./assets/logo.png">
   <ul>
-    <li v-for="character in characters" :key="character.id">
-        {{ character.name }}
+    <li v-for="post in allPosts" :key="post.id">
+        <h4>{{ post.id }}</h4>
+        <h4>{{ post.title }}</h4>
+      <button>Delete</button>
     </li>
   </ul>
 </template>
@@ -10,17 +12,18 @@
 <script>
 
 import {useQuery} from '@vue/apollo-composable'
-import allCharactersQuery from '../src/graphql/allCharacters.query.gql'
+import allPostsQuery from '../src/graphql/posts/allPosts.query.gql'
 import {computed} from "vue";
 
 export default {
   name: 'App',
   components: {},
   setup(){
-    const {result} = useQuery(allCharactersQuery)
-    const characters = computed(() => result.value?.characters.results ?? []);
+    const {result} = useQuery(allPostsQuery)
+    const allPosts = computed(() => result.value?.posts.data ?? []);
+
     return {
-      characters
+      allPosts
     }
   },
 
