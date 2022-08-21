@@ -5,12 +5,29 @@
 
 <script>
 import HelloWorld from './components/HelloWorld.vue'
+import {ref} from "vue";
+import {useQuery} from '@vue/apollo-composable'
+import allCharactersQuery from '../src/graphql/allCharacters.query.gql'
 
 export default {
   name: 'App',
   components: {
     HelloWorld
-  }
+  },
+  setup(){
+    const message = ref('hello')
+    const {result} = useQuery(allCharactersQuery)
+    console.log(result)
+    const characters = ref(result)
+    console.log(characters)
+
+
+    return {
+      message,
+      characters
+    }
+  },
+
 }
 </script>
 
