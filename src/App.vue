@@ -1,29 +1,25 @@
 <template>
   <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <ul>
+    <li v-for="character in characters" :key="character.id">
+        {{ character.name }}
+    </li>
+  </ul>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-import {ref} from "vue";
+
 import {useQuery} from '@vue/apollo-composable'
 import allCharactersQuery from '../src/graphql/allCharacters.query.gql'
+import {computed} from "vue";
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
-  },
+  components: {},
   setup(){
-    const message = ref('hello')
     const {result} = useQuery(allCharactersQuery)
-    console.log(result)
-    const characters = ref(result)
-    console.log(characters)
-
-
+    const characters = computed(() => result.value?.characters.results ?? []);
     return {
-      message,
       characters
     }
   },
