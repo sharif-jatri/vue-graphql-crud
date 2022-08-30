@@ -1,49 +1,25 @@
 <template>
   <img alt="Vue logo" src="./assets/logo.png">
 <!--  <label>https://www.youtube.com/watch?v=UbYt1PokMrM</label>-->
-  <ul>
-    <li v-for="post in allPosts" :key="post.id">
-        <h4>{{ post.id }}</h4>
-        <h4>{{ post.title }}</h4>
-      <button @click="deleteAndUpdateCache(post.id)">Delete</button>
-    </li>
-  </ul>
+<!--  <label>https://dev.to/aaronksaunders/graphql-vue-composition-api-with-apollo-composable-3kk4</label>-->
+<!--  <label>json-graphql-server db.js --p 3015</label>-->
+  <SignupForm />
+  <hr />
+  <h1>JSON server</h1>
+  <JsonServerList />
+  <hr />
+  <h1>OnlineServerList</h1>
+  <OnlineServerList />
 </template>
 
 <script>
-
-import {useQuery, useMutation} from '@vue/apollo-composable'
-import allPostsQuery from '../src/graphql/posts/allPosts.query.gql'
-import deletePostMutation from '../src/graphql/posts/deletePost.mutation.gql'
-
-import {computed} from "vue";
+import SignupForm from "@/components/SignupForm";
+import JsonServerList from "@/components/JsonServerList";
+import OnlineServerList from "@/components/OnlineServerList";
 
 export default {
   name: 'App',
-  components: {},
-  setup(){
-    const {result} = useQuery(allPostsQuery)
-    const allPosts = computed(() => result.value?.posts.data ?? []);
-
-    const { mutate: deletePost } = useMutation(deletePostMutation)
-
-    function deleteAndUpdateCache(id){
-      deletePost({ id }, {
-        update: (store, {}) => {
-          const data = store.readQuery({query: allPostsQuery})
-          const updateData = data.posts.data.filter(post => post.id !== id)
-          store.writeQuery({query: allPostsQuery, data: { data: updateData }})
-        }
-      }
-      )}
-
-    return {
-      allPosts,
-      deletePost,
-      deleteAndUpdateCache
-    }
-  },
-
+  components: {OnlineServerList, JsonServerList, SignupForm}
 }
 </script>
 
